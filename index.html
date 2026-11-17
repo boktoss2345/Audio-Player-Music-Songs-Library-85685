@@ -1,1 +1,86 @@
-aaaaa
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Roblox Launcher</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { font-family: Arial, Helvetica, sans-serif; color: #f8fafc; background: #090c15; }
+    body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 24px; background: radial-gradient(ellipse at 20% 10%, #193c65 0, transparent 48%), radial-gradient(ellipse at 90% 90%, #26315c 0, transparent 45%), #090c15; }
+    main { width: min(100%, 420px); text-align: center; padding: 44px 28px 28px; border-radius: 30px; border: 1px solid #ffffff1c; background: #121925ed; box-shadow: 0 24px 100px #0006; }
+    .icon { width: 92px; height: 92px; border-radius: 27px; background: linear-gradient(140deg, #62dcff, #2175ff); display: grid; place-items: center; margin: 0 auto 25px; box-shadow: 0 12px 38px #1e8bff40; }
+    .icon svg { width: 46px; height: 46px; }
+    h1 { font-size: 29px; margin: 0 0 10px; letter-spacing: -.7px; }
+    .subtitle { color: #9caec3; font-size: 14px; line-height: 1.6; margin: 0 0 28px; }
+    .stage { min-height: 174px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+    .spinner { width: 42px; height: 42px; border: 3px solid #ffffff16; border-top-color: #5bd8ff; border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #status { margin: 0; color: #b7c6d8; font-size: 15px; }
+    .action { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 16px; border: 0; border-radius: 16px; background: linear-gradient(110deg, #36c3ff, #377eff); color: white; font: 700 18px Arial, sans-serif; text-decoration: none; cursor: pointer; box-shadow: 0 9px 28px #1675ff30; transition: transform .18s, filter .18s; }
+    .action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .action:active { transform: scale(.98); }
+    .action:focus-visible { outline: 3px solid white; outline-offset: 5px; }
+    .action svg { width: 20px; height: 20px; flex-shrink: 0; }
+    #store-note { color: #b2bfd0; font-size: 12px; line-height: 1.7; margin: 0; }
+    footer { color: #8090a5; font-size: 11px; line-height: 1.7; margin-top: 26px; padding-top: 20px; border-top: 1px solid #ffffff10; }
+    [hidden] { display: none !important; }
+    @media (max-width: 380px) { main { padding: 34px 20px 24px; } h1 { font-size: 26px; } .action { font-size: 16px; } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2s; } .action { transition: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M17 10 38 24 17 38Z" fill="white" stroke="white" stroke-linejoin="round" stroke-width="3"/></svg></div>
+    <h1>Roblox Launcher</h1>
+    <p class="subtitle">Your next adventure is one tap away.</p>
+    <div class="stage" aria-busy="true" id="stage">
+      <div class="spinner" id="spinner" aria-hidden="true"></div>
+      <p id="status" role="status" aria-live="polite">Loading… Please wait</p>
+      <button class="action" id="play" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 4 13 8-13 8Z" fill="currentColor"/></svg>Play Roblox</button>
+      <a class="action" id="update" href="amzn://apps/android?initiatePurchaseFlow=true&amp;asin=B0HQYBDGYB" aria-describedby="store-note" hidden>Update Roblox to Play <span aria-hidden="true">↗</span></a>
+      <p id="store-note" hidden>Open Amazon Appstore and Download.</p>
+    </div>
+    <footer>Roblox launcher<br>install Roblox updates.</footer>
+    <noscript><p>Please enable JavaScript to continue.</p></noscript>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      // Change these delays in milliseconds.
+      const INITIAL_DELAY = 3000;
+      const AFTER_PLAY_DELAY = 2000;
+      const stage = document.getElementById('stage');
+      const spinner = document.getElementById('spinner');
+      const status = document.getElementById('status');
+      const play = document.getElementById('play');
+      const update = document.getElementById('update');
+      const note = document.getElementById('store-note');
+
+      setTimeout(() => {
+        spinner.hidden = true;
+        status.textContent = 'Ready to continue';
+        stage.setAttribute('aria-busy', 'false');
+        play.hidden = false;
+      }, INITIAL_DELAY);
+
+      play.addEventListener('click', () => {
+        play.disabled = true;
+        play.hidden = true;
+        spinner.hidden = false;
+        status.textContent = 'Preparing store link…';
+        stage.setAttribute('aria-busy', 'true');
+        setTimeout(() => {
+          spinner.hidden = true;
+          status.textContent = 'Continue in Amazon Appstore';
+          stage.setAttribute('aria-busy', 'false');
+          update.hidden = false;
+          note.hidden = false;
+          update.focus();
+        }, AFTER_PLAY_DELAY);
+      }, { once: true });
+    })();
+  </script>
+</body>
+</html>
